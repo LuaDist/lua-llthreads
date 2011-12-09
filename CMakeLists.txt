@@ -1,47 +1,31 @@
-#
-# A simple low-level Lua wrapper for pthreads.
-#
+# Copyright (C) 2007-2011 LuaDist.
+# Created by Robert G. Jakabosky and modified by Peter Drahoš
+# Redistribution and use of this file is allowed according to the terms of the MIT license.
+# For details see the COPYRIGHT file distributed with LuaDist.
+# Please note that the package source code is licensed under its own license.
+
 cmake_minimum_required(VERSION 2.8)
 
 project(lua-llthreads C)
-
-set(BUILD_SHARED_LIBS TRUE)
+include(dist.cmake)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-set(INSTALL_CMOD ${CMAKE_INSTALL_PREFIX}/lib/lua/5.1 CACHE PATH
-				"Directory to install Lua binary modules (configure lua via LUA_CPATH)")
 set(LUA_NATIVE_OBJECTS_PATH ../LuaNativeObjects CACHE PATH
 				"Directory to LuaNativeObjects bindings generator.")
 set(USE_PRE_GENERATED_BINDINGS TRUE CACHE BOOL
 				"Set this to FALSE to re-generate bindings using LuaNativeObjects")
 
-set(COMMON_CFLAGS "${CFLAGS}")
-set(COMMON_LDFLAGS)
-set(COMMON_LIBS)
-
-## Lua 5.1.x
-include(FindLua51)
-if(NOT ${LUA51_FOUND})
-    message(FATAL_ERROR "The FindLua51 module could not find lua :-(")
-endif()
-## MAC OSX needs extra linker flags
-if(APPLE)
-	set(COMMON_LDFLAGS "${COMMON_LDFLAGS} -undefined dynamic_lookup")
-endif()
-
 ## find threads
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 include(FindThreads)
-
 include(CustomMacros)
 
 ## LuaNativeObjects
 include(LuaNativeObjects)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_BINARY_DIR}
-                    ${LUA_INCLUDE_DIR})
+                    ${CMAKE_CURRENT_BINARY_DIR})
 
 ## LuaLLTHREADS
 set(LUA_LLTHREADS_SRC
@@ -55,13 +39,9 @@ else()
 	GenLuaNativeObjects(LUA_LLTHREADS_SRC)
 endif()
 
-add_library(lua-llthreads MODULE ${LUA_LLTHREADS_SRC})
-target_link_libraries(lua-llthreads ${COMMON_LIBS} ${CMAKE_THREAD_LIBS_INIT})
-set_target_properties(lua-llthreads PROPERTIES PREFIX "")
-add_target_properties(lua-llthreads COMPILE_FLAGS "${COMMON_CFLAGS}")
-add_target_properties(lua-llthreads LINK_FLAGS "${LD_FLAGS} ${COMMON_LDFLAGS}")
-set_target_properties(lua-llthreads PROPERTIES OUTPUT_NAME llthreads)
+install_lua_module(llthreads ${LUA_LLTHREADS_SRC} LINK  ${COMMON_LIBS} ${CMAKE_THREAD_LIBS_INIT} )
+install_data(COPYRIGHT README.md)
+install_example(examples/)
+install_test(tests/)
 
-install(TARGETS lua-llthreads
-        DESTINATION "${INSTALL_CMOD}")
 
