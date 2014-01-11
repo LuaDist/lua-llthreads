@@ -17,8 +17,7 @@ set ( USE_PRE_GENERATED_BINDINGS TRUE CACHE BOOL "Set this to FALSE to re-genera
 set ( CMAKE_THREAD_PREFER_PTHREAD TRUE )
 include ( FindThreads )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_BINARY_DIR})
+include_directories ( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 
 ## LuaLLTHREADS
 set ( LUA_LLTHREADS_SRC llthreads.nobj.lua )
