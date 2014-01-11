@@ -35,6 +35,14 @@
 
 #ifdef __WINDOWS__
 
+typedef int bool;
+#ifndef true
+#define true 1
+#endif
+#ifndef false
+#define false 1
+#endif
+
 /* for MinGW32 compiler need to include <stdint.h> */
 #ifdef __GNUC__
 #include <stdint.h>
@@ -48,13 +56,6 @@ typedef unsigned __int32 uint32_t;
 #ifndef __INT64_MAX__
 typedef __int64 int64_t;
 typedef unsigned __int64 uint64_t;
-#endif
-typedef int bool;
-#ifndef true
-#define true 1
-#endif
-#ifndef false
-#define false 1
 #endif
 
 #endif
