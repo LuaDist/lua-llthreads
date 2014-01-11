@@ -6,7 +6,7 @@ version = "1.2"
 desc = "A simple Lua wrapper for pthreads & WIN32 threads."
 author = "Robert G. Jakabosky"
 license = "MIT/X11"
-url = ""
+url = "https://github.com/Neopallium/lua-llthreads"
 maintainer = "Peter Drahoš"
 
 depends = {
